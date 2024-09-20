@@ -4,14 +4,15 @@
     </header>
     <main>
         <article v-for="(post, index) in posts" :key="post.id">
-            <h3>{{ post.title }}</h3>
-            <img src="https://i.pinimg.com/originals/8e/57/85/8e578585b383dc11bc8753de50819d34.jpg" alt="Обложка статьи">
-            <ul>
-                <li v-for="tag  in post.tags" :key="tag.id">
+            <h3>{{ post.attributes.title }}</h3>
+            <img :src=home_url+post.attributes.cover.data.attributes.formats.thumbnail.url alt="Обложка статьи">
+            <p>{{ post.attributes.desc }}</p>
+            <!-- <ul>
+                <li v-for="tag in post.tags" :key="tag.id">
                     {{ tag }}
                 </li>
-            </ul>
-            <nuxt-link :to="'/post/' + (index + 1)">Подробнее</nuxt-link>
+            </ul> -->
+            <nuxt-link :to="'/post/' + post.id">Подробнее</nuxt-link>
         </article>
     </main>
 </template>
@@ -57,6 +58,8 @@
 </style>
 
 <script setup>
-  const dataTwice = await $fetch('https://dummyjson.com/posts')
-  const posts = dataTwice.posts
+  const json = await $fetch('http://localhost:1337/api/posts?populate=*')
+  const posts = json.data
+
+  const home_url = "http://localhost:1337"
 </script>
